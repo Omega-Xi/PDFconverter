@@ -85,6 +85,7 @@ async function convertFile(pdfFile){
         const response=await fetch('/',{method:'POST',body:formData});
         //checking if file fetched successfully
         if(!response.ok){
+            console.log(response);
             throw new Error("Server Returned Error");
         }
         
