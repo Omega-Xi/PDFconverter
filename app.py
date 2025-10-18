@@ -15,6 +15,7 @@ if tesseract_path:
 
 #instantiate Flask application
 app=Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
 
 #setting route
 @app.route('/',methods=['GET','POST'])

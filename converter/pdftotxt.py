@@ -17,6 +17,8 @@ if tesseract_path:
     import pytesseract
     pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
+if not os.path.exists(tesseract_path):
+    print(f"[WARN] Tesseract path not found at {tesseract_path}")
 
 # Optional: for language detection
 try:
