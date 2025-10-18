@@ -1,21 +1,24 @@
-# Use official Python base image
-FROM python:3.11-slim
+# Use an official Python runtime image
+FROM python:3.9-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y tesseract-ocr libgl1 && \
-    rm -rf /var/lib/apt/lists/*
+# Install system-level dependencies for Tesseract OCR
+RUN apt-get update && apt-get install -y tesseract-ocr libtesseract-dev && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy project files
+# Copy your application files into the container
 COPY . .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies from requirements.txt
+RUN pip install -r requirements.txt
 
-# Environment variable for Flask
-ENV FLASK_ENV=production
+# Specify the Tesseract command path for pytesseract
+ENV TESSERACT_CMD="/usr/bin/tesseract"
 
-# Start the app using Gunicorn
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:10000"]
+# Expose the port your application will listen on (e.g., for a Flask app)
+EXPOSE 80
+
+# Define the command to start your application
+# Replace `gunicorn your_app:app` with your actual start command
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "app:app"]
