@@ -115,20 +115,28 @@ async function convertFile(pdfFile) {
         });
 
         if (!response.ok) {
+            // Clone the response to read it without consuming the body
+            const errorResponse = response.clone();
             let errorMessage = `Server Error: ${response.status} ${response.statusText}`;
             
             try {
-                const errorData = await response.json();
+                const errorData = await errorResponse.json();
                 errorMessage = errorData.error || errorMessage;
             } catch (e) {
-                // If response isn't JSON, use status text
-                const errorText = await response.text();
-                console.log('Raw error response:', errorText);
+                try {
+                    // If JSON parsing fails, try text
+                    const errorText = await errorResponse.text();
+                    errorMessage = errorText || errorMessage;
+                } catch (textError) {
+                    // If all else fails, use status
+                    console.log('Could not read error response body');
+                }
             }
             
             throw new Error(errorMessage);
         }
 
+        // Now read the successful response as blob
         const blob = await response.blob();
         
         if (blob.size === 0) {
