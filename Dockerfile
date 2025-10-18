@@ -1,8 +1,8 @@
 # Use an official Python runtime image
 FROM python:3.10-slim
 
-# Install system-level dependencies for Tesseract OCR
-RUN apt-get update && apt-get install -y tesseract-ocr libtesseract-dev && rm -rf /var/lib/apt/lists/*
+# Install system-level dependencies for Tesseract OCR AND OpenCV
+RUN apt-get update && apt-get install -y tesseract-ocr libtesseract-dev libgl1 && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -20,5 +20,4 @@ ENV TESSERACT_CMD="/usr/bin/tesseract"
 EXPOSE 80
 
 # Define the command to start your application
-# Replace `gunicorn your_app:app` with your actual start command
 CMD ["gunicorn", "--bind", "0.0.0.0:80", "app:app"]
