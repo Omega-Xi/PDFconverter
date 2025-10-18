@@ -7,6 +7,44 @@ import pytesseract
 import numpy as np
 from dotenv import load_dotenv
 import os
+import platform
+import shutil
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Try to find a valid Tesseract path automatically
+def get_tesseract_path():
+    env_path = os.getenv("TESSERACT_PATH")
+    if env_path and os.path.exists(env_path):
+        return env_path
+
+    # Common Linux locations
+    for path in ["/usr/bin/tesseract", "/usr/local/bin/tesseract", "/snap/bin/tesseract"]:
+        if os.path.exists(path):
+            return path
+
+    # Windows default
+    win_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+    if platform.system() == "Windows" and os.path.exists(win_path):
+        return win_path
+
+    # As last resort, check PATH
+    found = shutil.which("tesseract")
+    if found:
+        return found
+
+    return None
+
+
+tesseract_path = get_tesseract_path()
+if tesseract_path:
+    pytesseract.pytesseract.tesseract_cmd = tesseract_path
+    print(f"[INFO] Using Tesseract at {tesseract_path}")
+else:
+    print("[ERROR] No valid Tesseract executable found! OCR will not work.")
+
 
 # Load environment variables
 load_dotenv()
