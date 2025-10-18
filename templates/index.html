@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Favicon.png') }}">
+    <title>Text Extractor</title>
+</head>
+<body>
+    <div id="maincontent">
+        <div id="mainHeading">
+            <h1>PDF To TXT Converter</h1>
+        </div>
+        <div id="content">
+            <div id="uploadDiv">
+                <label for="pdfInput" id="inputLabel">Upload your PDF here</label>
+                <input type="file" id="pdfInput" accept="application/pdf">
+                <button onclick="startConversion()" id="convertBtn">Convert</button>
+            </div>
+            <div id="spinner" style="display: none;">
+            </div>
+            <div id="downloadDiv">
+                <button onclick="startDownload()" id="downloadBtn" disabled>Download</button>
+                <label for="downloadBtn" id="downloadLabel"></label>
+            </div>
+        </div>
+    </div>
+    <img id="logo" src="{{ url_for('static', filename='Images/LogoNew.png') }}" alt="PDF Converter Logo" width="100">
+</body>
+<script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+</html>
