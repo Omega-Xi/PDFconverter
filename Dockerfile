@@ -3,6 +3,7 @@ FROM python:3.10-slim
 
 # Install system-level dependencies for Tesseract OCR AND OpenCV
 #RUN apt-get update && apt-get install -y tesseract-ocr libtesseract-dev libgl1 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libgl1
 
 # Set the working directory inside the container
 WORKDIR /app
