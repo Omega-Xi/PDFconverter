@@ -1,10 +1,10 @@
-import fitz
-import statistics
+#import fitz
+#import statistics
 import io
-import cv2
-from PIL import Image
-import pytesseract
-import numpy as np
+#import cv2
+#from PIL import Image
+#import pytesseract
+#import numpy as np
 from dotenv import load_dotenv
 import os
 import platform
@@ -71,7 +71,7 @@ pytesseract.pytesseract.tesseract_cmd = os.getenv(
     "TESSERACT_PATH", r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 )
 
-import fitz
+#import fitz
 import io
 from pypdf import PdfReader
 
@@ -202,44 +202,44 @@ if __name__=="__main__":
 #     return textFile
 
 
-def sort_contours(contours, tolerance=10):
-    bounding_boxes = [cv2.boundingRect(c) for c in contours]
-    contours_with_boxes = sorted(zip(contours, bounding_boxes), key=lambda b: b[1][1])
+# def sort_contours(contours, tolerance=10):
+#     bounding_boxes = [cv2.boundingRect(c) for c in contours]
+#     contours_with_boxes = sorted(zip(contours, bounding_boxes), key=lambda b: b[1][1])
 
-    rows, current_row, row_ys = [], [], []
-    for contour, (x, y, w, h) in contours_with_boxes:
-        if not row_ys or abs(y - statistics.median(row_ys)) <= tolerance:
-            current_row.append((contour, (x, y, w, h)))
-            row_ys.append(y)
-        else:
-            rows.append(current_row)
-            current_row, row_ys = [(contour, (x, y, w, h))], [y]
+#     rows, current_row, row_ys = [], [], []
+#     for contour, (x, y, w, h) in contours_with_boxes:
+#         if not row_ys or abs(y - statistics.median(row_ys)) <= tolerance:
+#             current_row.append((contour, (x, y, w, h)))
+#             row_ys.append(y)
+#         else:
+#             rows.append(current_row)
+#             current_row, row_ys = [(contour, (x, y, w, h))], [y]
 
-    if current_row:
-        rows.append(current_row)
+#     if current_row:
+#         rows.append(current_row)
 
-    sorted_contours = [c for row in rows for c, _ in sorted(row, key=lambda b: b[1][0])]
-    return rows, sorted_contours
+#     sorted_contours = [c for row in rows for c, _ in sorted(row, key=lambda b: b[1][0])]
+#     return rows, sorted_contours
 
-def remove_page_border(bw):
-    # Remove a solid outer border if present
-    contours, _ = cv2.findContours(bw, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    if not contours:
-        return bw
+# def remove_page_border(bw):
+#     # Remove a solid outer border if present
+#     contours, _ = cv2.findContours(bw, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+#     if not contours:
+#         return bw
 
-    # Get largest contour (likely the page border)
-    largest_contour = max(contours, key=cv2.contourArea)
-    x, y, w, h = cv2.boundingRect(largest_contour)
+#     # Get largest contour (likely the page border)
+#     largest_contour = max(contours, key=cv2.contourArea)
+#     x, y, w, h = cv2.boundingRect(largest_contour)
 
-    # Calculate area ratios
-    page_area = bw.shape[0] * bw.shape[1]
-    contour_area = cv2.contourArea(largest_contour)
+#     # Calculate area ratios
+#     page_area = bw.shape[0] * bw.shape[1]
+#     contour_area = cv2.contourArea(largest_contour)
 
-    # If the largest contour is nearly the full page, crop inside it slightly
-    if contour_area / page_area > 0.9:
-        margin = int(min(w, h) * 0.02)  # 2% inward crop
-        bw = bw[y + margin:y + h - margin, x + margin:x + w - margin]
-    return bw
+#     # If the largest contour is nearly the full page, crop inside it slightly
+#     if contour_area / page_area > 0.9:
+#         margin = int(min(w, h) * 0.02)  # 2% inward crop
+#         bw = bw[y + margin:y + h - margin, x + margin:x + w - margin]
+#     return bw
 
 
 # if __name__ == "__main__":
